@@ -1,17 +1,26 @@
+<div align="center">
+
 # CPE Pro 2 SMS Forwarder
 
 #### [简体中文](README.md) | **English**
 
-An SMS forwarder built for the **Fiberhome CPE Pro 2**: it polls the router's admin panel for new SMS and forwards them via [shoutrrr](https://github.com/nicholas-fedor/shoutrrr) to Bark, Telegram, ntfy, Gotify, email, and more. It fully implements the panel's encrypted login protocol. Written in pure Go with no browser dependency, it ships as a single binary and is well suited to running long-term on low-power devices such as soft routers.
-
-> [!NOTE]
-> Only the Fiberhome CPE Pro 2 is supported; other CPE models use different admin protocols and will not work.
+An SMS forwarder built for the **Fiberhome CPE Pro 2** that pushes new SMS from the router to Bark, Telegram, ntfy, Gotify, email, and more.
 
 ![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS%20%7C%20OpenWrt-blue?style=for-the-badge)
-![License](https://img.shields.io/github/license/AHCorn/CPE-Pro-2-SMS-Forwarder?style=for-the-badge)
 ![GitHub stars](https://img.shields.io/github/stars/AHCorn/CPE-Pro-2-SMS-Forwarder?style=for-the-badge)
 ![GitHub issues](https://img.shields.io/github/issues/AHCorn/CPE-Pro-2-SMS-Forwarder?style=for-the-badge)
+
+</div>
+
+<br>
+
+Notifications are delivered via [shoutrrr](https://github.com/nicholas-fedor/shoutrrr). It fully implements the panel's encrypted login protocol, is written in pure Go with no browser dependency, ships as a single binary, and is well suited to running long-term on low-power devices such as soft routers.
+
+> [!NOTE]
+> Only the Fiberhome CPE Pro 2 is supported; other CPE models use different admin protocols and will not work.
+>
+> Most of the work in this project was done by AI. It runs fine in my personal setup; if you run into any issues, feedback is always welcome.
 
 ## Features
 
