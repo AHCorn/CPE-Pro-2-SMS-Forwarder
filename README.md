@@ -4,7 +4,7 @@
 
 #### **简体中文** | [English](README_EN.md)
 
-专为 **烽火 CPE Pro 2** 打造的短信转发工具，自动将路由器收到的新短信推送到 Bark、Telegram、ntfy、Gotify、邮件等渠道。
+专为 **烽火 CPE Pro 2** 打造的短信转发工具，自动将新短信推送到 Bark、Telegram、邮件等渠道。
 
 ![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS%20%7C%20OpenWrt-blue?style=for-the-badge)
@@ -17,9 +17,11 @@
 
 通知基于 [shoutrrr](https://github.com/nicholas-fedor/shoutrrr) 推送，完整实现了后台的加密登录协议，纯 Go 编写，不依赖浏览器，单文件部署，适合在软路由等低功耗设备上长期运行。
 
-> 本工具仅适配烽火 CPE Pro 2，其他型号的后台协议不同、无法直接使用。
->
-> 本项目绝大部分工作由 AI 完成，个人自用环境下工作正常，若有问题欢迎您随时反馈。
+## 提示
+
+本工具仅适配烽火 CPE Pro 2，其他型号的后台协议不同、无法直接使用。
+
+本项目绝大部分工作由 AI 完成，个人自用环境下工作正常，若有问题欢迎您随时反馈。
 
 ## 特性
 
