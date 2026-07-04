@@ -1,0 +1,48 @@
+# CPE SMS Forwarder 配置文件
+# 所有配置项均可通过环境变量覆盖（优先级更高）
+# 敏感信息建议通过环境变量传入，而非写在此文件中
+
+cpe:
+  host: "192.168.2.1"           # 环境变量: CPE_HOST
+  username: ""                   # 环境变量: CPE_USERNAME
+  password: ""                   # 环境变量: CPE_PASSWORD
+
+# 通知渠道：通过 shoutrrr 统一推送，可同时配置多个，渠道与参数都由 URL 决定。
+# 常见示例（更多见 https://shoutrrr.nickfedor.com/）：
+#   Bark:     bark://:设备Key@api.day.app           可加 ?sound=铃声&group=分组
+#   Telegram: telegram://<bot-token>@telegram?chats=@频道或chatID
+#   ntfy:     ntfy://ntfy.sh/你的主题
+#   Gotify:   gotify://gotify.example.com/应用token
+#   邮件:     smtp://用户:密码@smtp.example.com:587/?from=发件@x.com&to=收件@x.com
+notify:
+  urls:                          # 环境变量: NOTIFY_URLS（多个以空格或换行分隔）
+    - "bark://:你的设备Key@api.day.app?group=cpe-sms"   # 分组/铃声等是渠道 URL 参数：?group=分组 ?sound=铃声
+  notify_yield: true             # 环境变量: NOTIFY_YIELD，是否在“后台被占用进入退避/恢复”时推送提醒。
+                                 # 留空=默认开启；false 关闭（不影响上下线/异常等其他通知）
+  retry_failed: false            # 环境变量: NOTIFY_RETRY_FAILED。多渠道可靠投递（默认 false=全渠道一次性发送、全部成功才标记已读）。
+                                 # true=逐渠道发送，部分渠道失败而另有渠道送达时自动重试失败渠道，重试仍失败则经送达渠道发一条降级提示
+  # 转发短信的标题/正文模板，占位符：{phone} 号码、{content} 正文、{time} 时间。
+  # 留空取默认；字面 \n 转成换行。环境变量: NOTIFY_SMS_TITLE / NOTIFY_SMS_BODY
+  sms_title: "CPE短信 - {phone}"
+  sms_body: "{content}\n\n{time}"
+  # 备用通知渠道：仅当上面所有主渠道对同一条消息全部推送失败时才启用（部分失败走 retry_failed），
+  # 用于主渠道整体故障时仍能触达你。默认关闭（url 留空）。
+  fallback:
+    url: ""                      # 环境变量: NOTIFY_FALLBACK_URL，shoutrrr URL（格式同 urls），留空=禁用
+    forward: false               # 环境变量: NOTIFY_FALLBACK_FORWARD。true=主渠道全失败时经备用渠道转发消息本体
+                                 # （送达即视为已转发，主渠道恢复后不再补发）；false=仅经备用渠道发一条限流的
+                                 # "主渠道离线"提示，短信本体积压待主渠道恢复后自动补发
+
+poll:
+  interval_seconds: 60           # 环境变量: CPE_POLL_INTERVAL
+  relogin_minutes: 30            # 环境变量: CPE_RELOGIN_MINUTES，定期强制重新登录间隔，防长连接会话僵死
+  yield_minutes: 5               # 环境变量: CPE_YIELD_MINUTES，后台被其他设备登录占用时最多退避多少分钟后才强制登录（顶号），
+                                 # 给手动登录后台的用户留出操作时间。0/留空=默认5；负数=禁用退避（每轮直接登录，可能顶掉正在使用后台的用户）
+
+# 去重状态持久化：记录已推送短信指纹，进程/路由重启后不重复推送，也不漏推停机期间到达的短信
+state:
+  file: ""                       # 环境变量: CPE_STATE_FILE，留空默认取配置文件同目录下 seen.json
+
+log:
+  file: ""                       # 环境变量: LOG_FILE。留空时：前台运行输出到终端；以服务方式运行时，
+                                 # Linux/macOS 由系统日志收集（journald/launchd/logd），Windows 默认写到可执行文件同目录

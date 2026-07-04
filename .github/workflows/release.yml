@@ -1,0 +1,60 @@
+name: Release
+
+# 打 v* 标签即交叉编译全平台二进制，连同一键安装脚本一起发布到 GitHub Releases。
+# 这样 README / 各平台文档 / install.sh / install.ps1 里的
+# "releases/latest/download/..." 下载链接才能生效。
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  # 以下用于 actions/attest-build-provenance 的 Sigstore 签名与证明持久化
+  id-token: write
+  attestations: write
+  artifact-metadata: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # 取全部历史与标签，使 Makefile 的 git describe --tags 能解析出当前版本号注入二进制
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Test before release
+        run: go test -race -count=1 ./...
+
+      - name: Cross-compile all platforms
+        run: make release
+
+      # 生成 sha256 校验和供 install.sh / install.ps1 校验下载完整性。
+      # 在 build/ 内运行以使文件名为纯名称（cpe-sms-forwarder-<os>-<arch>），与脚本按资产名查表一致。
+      - name: Generate SHA256 checksums
+        run: cd build && sha256sum cpe-sms-forwarder-* > SHA256SUMS && cat SHA256SUMS
+
+      # 为每个二进制生成 SLSA 构建溯源（Sigstore 签名），发布到 GitHub 证明 API。
+      # 下载者可 `gh attestation verify <binary> --repo <owner>/<repo>` 核实其确由本仓库 CI 构建。
+      # 这是附加项：一键脚本仍靠 SHA256SUMS 校验完整性，零依赖安装不受影响。
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: build/cpe-sms-forwarder-*
+
+      - name: Publish release with binaries and install scripts
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            build/cpe-sms-forwarder-*
+            build/SHA256SUMS
+            scripts/install.sh
+            scripts/install.ps1

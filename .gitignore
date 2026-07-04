@@ -1,0 +1,39 @@
+# 构建产物
+/build/
+/cpe-sms-forwarder
+*.exe
+
+# IDE
+.cursor/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时文件
+/tmp/
+*.log
+
+# 运行时状态（短信去重指纹，含运行数据，勿提交）
+seen.json
+*.seen.json
+
+# 本地配置（可能含真实凭证，勿提交；仓库内 config.yaml 仅为占位示例）
+config.local.yaml
+*.local.yaml
+
+# 测试 / 覆盖率产物
+*.out
+coverage.*
+
+# 本地开发用的冒烟工具，不发布（单元测试随仓库发布）
+/cmd/smoke/
+
+# 一键安装脚本（scripts/install.sh、scripts/install.ps1）随仓库发布；
+# 仅本地运维脚本不发布
+/scripts/openwrt-deploy.sh
