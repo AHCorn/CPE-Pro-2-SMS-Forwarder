@@ -23,7 +23,7 @@
 
 ## 特性
 
-通知基于 [shoutrrr](https://github.com/nicholas-fedor/shoutrrr) 推送，完整实现了后台的加密登录协议，纯 Go 编写，不依赖浏览器，单文件部署，适合在软路由等低功耗设备上长期运行。
+完整实现了后台的加密登录协议，适合在软路由等低功耗设备上长期稳定运行。
 
 - 纯 HTTP API 交互，不依赖浏览器，单个静态二进制即可运行
 - 多渠道通知：基于 shoutrrr，支持 Bark、Telegram、ntfy、Gotify、邮件、Slack 等二十余种渠道，可同时推送

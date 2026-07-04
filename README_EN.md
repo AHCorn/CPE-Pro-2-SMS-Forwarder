@@ -23,7 +23,7 @@ Most of the work in this project was done by AI. It runs fine in my personal set
 
 ## Features
 
-Notifications are delivered via [shoutrrr](https://github.com/nicholas-fedor/shoutrrr). It fully implements the panel's encrypted login protocol, is written in pure Go with no browser dependency, ships as a single binary, and is well suited to running long-term on low-power devices such as soft routers.
+The forwarder fully implements the panel's encrypted login protocol and is well suited to running long-term on low-power devices such as soft routers.
 
 - Pure HTTP API interaction with no browser or headless dependency; runs as a single static binary
 - Multi-channel notifications: built on shoutrrr, supporting Bark, Telegram, ntfy, Gotify, email, Slack, and 20+ other services, with delivery to multiple channels at once
